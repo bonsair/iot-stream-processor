@@ -99,7 +99,7 @@ Y por último creamos un conector que nos permita leer la información de la tab
 Una vez que tengamos la información en cada una de las colecciones, podremos consultarlas desde Tableau y crear los informes que necesitemos.
 
 
-###Infraestructura
+### Infraestructura
 
 Como ya he explicado, la parte de generación de información de los sensores está en la carpeta iot-sensor.
 El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio.
