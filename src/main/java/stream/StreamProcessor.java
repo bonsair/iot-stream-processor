@@ -76,7 +76,6 @@ public class StreamProcessor {
             }
         });
 
-
         //Enviamos los buenos a kafka
         filterStream.map((MapFunction<SensorEvent, SensorEvent>) s -> sendToKafka(s, properties));
 
