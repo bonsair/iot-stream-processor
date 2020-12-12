@@ -102,8 +102,10 @@ Una vez que tengamos la información en cada una de las colecciones, podremos co
 ### Infraestructura
 
 Como ya he explicado, la parte de generación de información de los sensores está en la carpeta iot-sensor.
-El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio.
-Para el resto de tecnologías y para poder probar su funcionamiento he utilizado el docker-compose.yml que está en la carpeta infraestructura, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos.
+
+El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio /src/main/java.
+
+Para el resto de tecnologías y para poder probar su funcionamiento se ha utilizado el docker-compose.yml que está en la carpeta infraestructura, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se hacer en el docker compose del conector de KSQLDB con mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
 ### Bibliografía
 
