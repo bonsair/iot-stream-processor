@@ -5,11 +5,11 @@ Este proyecto implementa un sistema para el procesado de eventos en tiempo real,
 
 A continuación se detallan cada una de las fases asi como su implementación:
 
-## Generación de información
+### Generación de información
 
 La información de los sensores se va a generar a través de un proceso docker que va a ejecutar código phyton, este código generará los valores asi como hará el envío de esa información mediante MQTT.
 
-Este código está localizado en la carpeta **iot-sensor** del proyecto.
+Este código está localizado en la carpeta **/iot-sensor** del proyecto.
 
 Para lanzar esos procesos uso lo siguiente:
 
@@ -21,7 +21,7 @@ Proceso docker que se va a levantar pasándole la información del nombre del se
 Como ya he comentado voy a usar un MQTT Broker público que proporciona HiveMq https://www.hivemq.com/public-mqtt-broker/, este broker nos sirve como depósito de los mensajes generados por los sensores para su posterior consumo.
 
 
-## Procesado de los datos
+### Procesado de los datos
 
 En esta fase se va a realizar el procesado en tiempo real, para empezar se van a obtener los mensajes del MQTT Broker, después se van a guardar en MongoDB, luego se van a filtrar los mensajes por sus valores para quedarnos solo con los correctos y por último se va a proceder al envío al topic Kafka.
 
@@ -38,7 +38,7 @@ Todo este procesado se va a realizar en la clase **StreamProccesor**, que es la 
 -Envío mensajes a topic kafka: por último se van a enviar los mensajes en formato JSON a un topic kafka para su análisis, los parámetros para la configuración de Kafka estarán en el fichero **application.properties**.
 
 
-## Análisis de la información
+### Análisis de la información
 
 El análisis de la información se va a realizar a través de la herramienta Tableau, para que esta herramienta puede acceder a los datos se van a dejar en colecciones de BBDD de Mongo y se va a necesitar un conector para poder leer esa información, la instalación de ese conector se describe aquí https://docs.mongodb.com/bi-connector/master/tutorial/install-bi-connector-macos.
 
@@ -99,19 +99,19 @@ Y por último creamos un conector que nos permita leer la información de la tab
 Una vez que tengamos la información en cada una de las colecciones, podremos consultarlas desde Tableau y crear los informes que necesitemos.
 
 
-### Infraestructura
+## Infraestructura
 
 Como ya he explicado, la parte de generación de información de los sensores está en la carpeta iot-sensor.
 
 El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio /src/main/java.
 
-Para el resto de tecnologías y para poder probar su funcionamiento se ha utilizado el docker-compose.yml que está en la carpeta infraestructura, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se hacer en el docker compose del conector de KSQLDB con mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
+Para el resto de tecnologías y para poder probar su funcionamiento se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se hacer en el docker compose del conector de KSQLDB con mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
-### Diseño de la arquitectura
+## Diseño de la arquitectura
 ![Diseño de la arquitectura](/arquitectura/Diagrama-arquitectura.png)
 
 
-### Bibliografía
+## Bibliografía
 
 Aquí están los enlaces más importantes utilizados para la realización del proyecto:
 
