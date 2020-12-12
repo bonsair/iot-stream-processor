@@ -17,6 +17,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import stream.data.SensorEvent;
+import stream.mongodb.MongoDBRawData;
 import stream.sources.HiveMQSource;
 
 import java.io.FileInputStream;
@@ -29,15 +30,15 @@ public class StreamProcessor {
 
     public static void main(String[] args) throws Exception {
 
-        //Creamos la BBDD Mongo
-        mongoDBRawData = new MongoDBRawData();
-        mongoDBRawData.connectBD();
-
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
-
         //Cargamos la configuración de la aplicación
         Properties properties = new Properties();
         properties.load(new FileInputStream("src/main/resources/application.properties"));
+
+        //Creamos la BBDD Mongo
+        mongoDBRawData = new MongoDBRawData(properties);
+        mongoDBRawData.connectBD();
+
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
 
         //Cargamos la configuración de la comunicación con Hive
         Properties mqttProperties = new Properties();

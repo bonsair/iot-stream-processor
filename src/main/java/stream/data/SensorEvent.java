@@ -3,7 +3,6 @@ package stream.data;
 public class SensorEvent {
 
     private String id;
-    //private Time timestamp;
     private String messageId;
     private String timestamp;
     private Metrics metrics;

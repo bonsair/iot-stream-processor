@@ -1,22 +1,25 @@
-package stream;
+package stream.mongodb;
 
 import com.mongodb.*;
 import stream.data.SensorEvent;
+
+import java.util.Properties;
 
 
 public class MongoDBRawData {
 
     private DB database;
+    private  Properties properties;
 
-    public MongoDBRawData(){
-
+    public MongoDBRawData(Properties properties){
+        this.properties = properties;
     }
 
     public void connectBD(){
 
         try {
-            MongoClient mongoClient = new MongoClient("localhost", 27017);
-            database = mongoClient.getDB("mydb");
+            MongoClient mongoClient = new MongoClient(properties.getProperty("MONGO_SERVER"), Integer.valueOf(properties.getProperty("MONGO_PORT")));
+            database = mongoClient.getDB(properties.getProperty("MONGO_DATABASE_NAME"));
         }catch(MongoSocketOpenException ex){
             System.out.println("Error al conectar con la BBDD Mongo");
         }
@@ -31,7 +34,7 @@ public class MongoDBRawData {
                 .append("temperature", document.getMetrics().getTemperature())
                 .append("humidity", document.getMetrics().getHumidity());
 
-        DBCollection collection = database.getCollection("raw");
+        DBCollection collection = database.getCollection(properties.getProperty("MONGO_RAW_COLLECTION"));
 
         try {
             collection.insert(sensorEvent);
