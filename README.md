@@ -107,6 +107,10 @@ El procesado de los datos se va a realizar con las clases que se proporcionan en
 
 Para el resto de tecnologías y para poder probar su funcionamiento se ha utilizado el docker-compose.yml que está en la carpeta infraestructura, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se hacer en el docker compose del conector de KSQLDB con mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
+### Diseño de la arquitectura
+![Diseño de la arquitectura](/arquitectura/Diagrama-arquitectura.png)
+
+
 ### Bibliografía
 
 Aquí están los enlaces más importantes utilizados para la realización del proyecto:
