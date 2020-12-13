@@ -9,8 +9,22 @@
   <component name="ChangeListManager">
     <list default="true" id="587f8373-46f8-44e5-bfac-ae647827cb64" name="Default" comment="Subida documentación">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/stream/StreamProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stream/StreamProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/stream/data/Metrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stream/data/Metrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/stream/data/SensorEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stream/data/SensorEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/stream/mongodb/MongoDBRawData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stream/mongodb/MongoDBRawData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/stream/sources/HiveMQSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stream/sources/HiveMQSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/StreamProcessor$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stream/StreamProcessor$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/StreamProcessor$SensorEventSchema.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/StreamProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stream/StreamProcessor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/data/Metrics.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stream/data/Metrics.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/data/SensorEvent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stream/data/SensorEvent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/mongodb/MongoDBRawData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stream/mongodb/MongoDBRawData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/stream/sources/HiveMQSource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/stream/sources/HiveMQSource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/iot-stream-processor-jar-with-dependencies.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/iot-stream-processor-jar-with-dependencies.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/iot-stream-processor.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/iot-stream-processor.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -280,6 +294,18 @@
         <option value="1" />
       </list>
     </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Default" />

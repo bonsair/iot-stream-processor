@@ -1,5 +1,6 @@
 package stream.data;
 
+//Objeto que nos proporciona la estructura de los mensajes
 public class SensorEvent {
 
     private String id;

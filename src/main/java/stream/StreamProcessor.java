@@ -21,6 +21,7 @@ import stream.mongodb.MongoDBRawData;
 import stream.sources.HiveMQSource;
 
 import java.io.FileInputStream;
+import java.sql.Time;
 import java.util.Properties;
 
 public class StreamProcessor {
@@ -53,19 +54,18 @@ public class StreamProcessor {
         //Transformamos en objeto SensorEvent
         DataStream<SensorEvent> stream = iotDataSource.map((MapFunction<String, SensorEvent>) s -> convertToSensor(s));
 
-
         //Guardamos en Mongo todos los mensajes
         stream.map((MapFunction<SensorEvent, SensorEvent>) s -> saveToMongo(s));
 
         //Filtramos los datos que no sean correctos
-
         DataStream<SensorEvent> filterStream = stream.filter(new FilterFunction<SensorEvent>() {
             @Override
             public boolean filter(SensorEvent sensorEvent)
                     throws Exception {
+
                 if (sensorEvent.getMetrics().getTemperature()==0 &&
                         sensorEvent.getMetrics().getHumidity()==0) {
-                    System.out.println("Medición vacia");
+                    System.out.println("Medición vacía");
                     return false;
                 } else {
                     if (sensorEvent.getMetrics().getTemperature() < 50 ||
@@ -80,16 +80,10 @@ public class StreamProcessor {
         //Enviamos los buenos a kafka
         filterStream.map((MapFunction<SensorEvent, SensorEvent>) s -> sendToKafka(s, properties));
 
-        stream.print();
-
-        System.out.println("Sensor-->"+stream.toString());
-
-
         env.execute("Procesado de eventos");
-
-
     }
 
+    //Convierto la información en un Objeto
     private static SensorEvent convertToSensor(String s){
         Gson g = new Gson();
         SensorEvent sensorEvent = g.fromJson(s, SensorEvent.class);
@@ -97,6 +91,7 @@ public class StreamProcessor {
         return sensorEvent;
     }
 
+    //Guardamos la información en crudo en Mongo
     private static SensorEvent saveToMongo(SensorEvent sensorEvent){
 
         System.out.println("Salvar en mongo: "+sensorEvent.toString());
@@ -111,9 +106,10 @@ public class StreamProcessor {
         return sensorEvent;
     }
 
+    //Envío los datos ya filtrados al topic Kafka que corresponda
     private static SensorEvent sendToKafka(SensorEvent sensorEvent,Properties properties){
 
-        //Configure the Producer
+        //Cargamos la configuración de comunicación con Kafka
         Properties configProperties = new Properties();
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getProperty("KAFKA_SERVER"));
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,properties.getProperty("KEY_SERIALIZER_CLASS_CONFIG"));
@@ -126,35 +122,11 @@ public class StreamProcessor {
 
         ProducerRecord<String, JsonNode> rec = new ProducerRecord<>(properties.getProperty("TOPIC_NAME"),jsonNode);
 
+        //Enviamos el mensaje al topic
         producer.send(rec);
 
         System.out.println("Enviado a Kafka"+jsonNode.toString());
 
         return sensorEvent;
     }
-
-
-    public static class SensorEventSchema implements DeserializationSchema<String>, SerializationSchema<String> {
-        private static final long serialVersionUID = 1L;
-
-        public SensorEventSchema() {
-        }
-
-        public String deserialize(byte[] message) {
-            return new String(message);
-        }
-
-        public boolean isEndOfStream(String nextElement) {
-            return false;
-        }
-
-        public byte[] serialize(String element) {
-            return element.getBytes();
-        }
-
-        public TypeInformation<String> getProducedType() {
-            return TypeExtractor.getForClass(String.class);
-        }
-    }
-
 }

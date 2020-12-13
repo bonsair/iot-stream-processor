@@ -15,6 +15,9 @@ public class MongoDBRawData {
         this.properties = properties;
     }
 
+    /**
+     * Realizamos la conexión a la BBDD
+     */
     public void connectBD(){
 
         try {
@@ -26,6 +29,10 @@ public class MongoDBRawData {
 
     }
 
+    /**
+     * Añadimos a la colección el dato pasado
+     * @param document
+     */
     public void setData(SensorEvent document)
     {
         DBObject sensorEvent = new BasicDBObject("_messageId", document.getMessageId())

@@ -44,7 +44,7 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
 
     private static void checkProperty(Properties p, String key) {
         if (!p.containsKey(key)) {
-            throw new IllegalArgumentException("Required property '" + key + "' not set.");
+            throw new IllegalArgumentException("Propiedad requerida'" + key + "' no informada.");
         }
     }
 
@@ -65,7 +65,7 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
 
 
         client.subscribeWith()  // crea la suscripción
-                .topicFilter(TOPIC_FILTER_NAME)  // filtros para recibir mensajes solo sobre este tema (# = comodín multinivel, + = comodín de un solo nivel)
+                .topicFilter(properties.getProperty(TOPIC_FILTER_NAME))  // filtros para recibir mensajes solo sobre este tema (# = comodín multinivel, + = comodín de un solo nivel)
                 .qos(MqttQos.AT_LEAST_ONCE)  // Establece la QoS en 2 (al menos una vez)
                 .send();
         System.out.println("Se ha subscrito al cliente");
@@ -85,22 +85,18 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
             try {
 
                 Mqtt5Publish receivedMessage = publishesClient2.receive(5, TimeUnit.SECONDS).get();
-
                 byte[] tempdata = receivedMessage.getPayloadAsBytes();    // convierte el mensaje de tipo "Opcional" en un array de bytes
-
                 String getdata = new String(tempdata); // convierte el array de bytes en una cadena
 
-                System.out.println("Valor en crudo: " + getdata);
+                System.out.println("Mensaje en crudo: " + getdata);
 
-                // Añadimos los valores a la colección
+                // Añadimos los valores
                 ctx.collect(getdata);
 
             }catch(NoSuchElementException ex){
                 System.out.println("Esperando elementos...");
             }
         }
-
-
     }
 
     @Override
@@ -119,7 +115,6 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
             this.running = false;
         }
 
-        // leave main method
         synchronized (waitLock) {
             waitLock.notify();
         }

@@ -3,7 +3,6 @@ package stream.data;
 public class Metrics {
 
     private long temperature;
-    //private Time timestamp;
     private long humidity;
 
     public void Metrics( long temperature, long humidity ){
