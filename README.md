@@ -112,11 +112,11 @@ Una vez que tengamos la información en cada una de las colecciones, podremos co
 
 ## Infraestructura
 
-Como ya he explicado, la parte de generación de información de los sensores se puede encontrar en la carpeta **/iot-sensor.**
+La parte de generación de información de los sensores se puede encontrar en la carpeta **/iot-sensor.**
 
 El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio **/src/main/java** y la configuración necesaria para realizar las distintas conexiones está en la carpeta **/src/main/resources**.
 
-Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar imágenes de Mongodb, Zookeeper, Kafka, Kafka Connect, del servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose en la imagen de Kafka Connect del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
+Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se van a levantar imágenes de Mongodb, Zookeeper, Kafka, Kafka Connect, del servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose en la imagen de Kafka Connect del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
 
 
