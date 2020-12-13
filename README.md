@@ -17,44 +17,44 @@ A continuación se detallan cada una de las fases asi como su implementación:
 
 ### Generación de la información
 
-La información de los sensores se va a generar a través de un proceso docker que va a ejecutar código phyton, este código generará los valores asi como hará el envío de esa información mediante MQTT.
+La información de los sensores se va a generar a través de un proceso docker que va a ejecutar código phyton. Este código generará los valores y hará el envío de esa información mediante MQTT.
 
-Este código está localizado en la carpeta **/iot-sensor** del proyecto.
+El código está localizado en la carpeta **/iot-sensor** del proyecto.
 
 Para lanzar esos procesos se usa lo siguiente:
 
 `docker run -it -e SENSOR_ID=sensor1rcc -e MQTT_BROKER_HOST=broker.hivemq.com -e MQTT_BROKER_PORT=1883 -e MQTT_BROKER_TOPIC=iot/sensor/rodri -e NUM_MESSAGES=10000 -e INTERVAL_MS=1000 -e NUM_THREADS=1 iot-sensor:latest
 `
 
-Este proceso docker se va a levantar pasándole la información del nombre del sensor que le vamos a dar, el MQTT Broker que se va a usar, asi como el puerto de este y el nombre del topic del topic MQTT Broker para dejar la información.
+Este proceso docker se va a levantar pasándole la información del nombre del sensor que le vamos a dar, el MQTT Broker que usaremos, asi como el puerto de este y el nombre del topic del MQTT Broker para dejar la información.
 
-Como ya he comentado voy a usar un MQTT Broker público que proporciona HiveMq (https://www.hivemq.com/public-mqtt-broker/), este broker nos sirve como depósito de los mensajes generados por los sensores para su posterior consumo.
+Como ya he comentado, voy a usar un MQTT Broker público que proporciona HiveMq (https://www.hivemq.com/public-mqtt-broker/), este broker nos sirve como depósito de los mensajes generados por los sensores para su posterior consumo.
 
 
 ### Procesado de los datos
 
-En esta fase se va a realizar el procesado en tiempo real, para empezar, se van a obtener los mensajes del MQTT Broker, después se van a guardar en MongoDB, luego se van a filtrar los mensajes por sus valores para quedarnos solo con los correctos y por último se va a proceder al envío al topic Kafka.
+En esta fase se va a realizar el procesado en tiempo real. En primer lugar, se van a obtener los mensajes del MQTT Broker, después se van a guardar en MongoDB, luego se van a filtrar los mensajes por sus valores para quedarnos solo con los correctos y por último se va a proceder al envío al topic Kafka.
 
-Todo este procesado se va a realizar en la clase **StreamProccesor**, que es la que a través de Flink realizará los distintos pasos:
+Todo este procesado se realizará en la clase **StreamProccesor**, que es la que a través de Flink, realizará los distintos pasos:
 
--_Obtención de los mensajes_: en el fichero de propiedades **application.properties** se define la configuración para la conexión al Broker MQTT, en la clase HiveMQSource hacemos la conexión al broker y nos suscribimos a este para ir obteniendo los mensajes.
+-_Obtención de los mensajes_: en el fichero de propiedades **application.properties** se define la configuración para la conexión al Broker MQTT. En la clase HiveMQSource hacemos la conexión al broker y nos suscribimos a este para ir obteniendo los mensajes.
 
--_Transformación de los mensajes a objeto_: vamos a transformar los mensajes en objetos para poder realizar el guardado en Mongo y el envío a Kafka, las clases que representan estos objetos y que usaremos para realizar la transformación para obtener la estructura son SensorEvent y Metrics.
+-_Transformación de los mensajes a objeto_: vamos a transformar los mensajes en objetos para poder realizar el guardado en Mongo y el envío a Kafka. Las clases que representan estos objetos y que usaremos para realizar la transformación para obtener la estructura son SensorEvent y Metrics.
 
--_Guardado de mensajes en crudo_: por si es necesario su posterior tratamiento, se van a guardar todos los mensajes en una BBDD Mongo, la clase que se va a ocupar de la comunicación con Mongo será **MongoDBRawdata**, los valores de configuración de Mongo estarán también en el fichero **application.properties**.
+-_Guardado de mensajes en crudo_: por si es necesario su posterior tratamiento, se guardarán todos los mensajes en una BBDD Mongo. La clase que se ocupará de la comunicación con Mongo será **MongoDBRawdata**. Los valores de configuración de Mongo estarán también en el fichero **application.properties**.
  
--_Filtrado de mensajes_: ya que los valores son generados por sensores y puede que estos no sean siempre correctos, se van a filtrar los mensajes de forma que solo nos vamos a quedar con los valores correctos, solo estos serán enviados para el análisis de la información.
+-_Filtrado de mensajes_: ya que los valores son generados por sensores y puede que estos no sean siempre correctos, se van a filtrar los mensajes de forma que solo nos quedaremos con los valores correctos que serán los únicos enviados para el análisis de la información.
 
--_Envío de mensajes a topic Kafka_: por último se van a enviar los mensajes en formato JSON a un topic kafka para su análisis, los parámetros para la configuración de Kafka estarán en el fichero **application.properties**.
+-_Envío de mensajes a topic Kafka_: por último se van a enviar los mensajes en formato JSON a un topic kafka para su análisis. Los parámetros para la configuración de Kafka estarán en el fichero **application.properties**.
 
 
 ### Análisis de la información
 
-El análisis de la información se va a realizar a través de la herramienta Tableau, para que esta herramienta puede acceder a los datos se van a dejar en colecciones de la BBDD de Mongo y se va a necesitar un conector para poder leer esa información, la instalación de ese conector se describe aquí https://docs.mongodb.com/bi-connector/master/tutorial/install-bi-connector-macos.
+El análisis de la información se va a realizar a través de la herramienta Tableau. Para que esta herramienta puede acceder a los datos, se van a dejar en colecciones de la BBDD de Mongo y se va a necesitar un conector para poder leer esa información. La instalación de ese conector se describe aquí https://docs.mongodb.com/bi-connector/master/tutorial/install-bi-connector-macos.
 
-Los mensajes enviados a Kafka se van a consumir de dos maneras diferente:
+Los mensajes enviados a Kafka se van a consumir de dos maneras diferentes:
 
--Toda la información de los mensajes correctos se va a trasladar a MongoDB, a través de KSQLDB podemos crear un conector que directamente lea del topic donde se han ido dejando los mensajes ya procesados, y se guarde la información en una colección de Mongo en formato JSON, para dar de alta este conector sería la siguiente forma:
+1-Toda la información de los mensajes correctos se va a trasladar a MongoDB. A través de KSQLDB podemos crear un conector que directamente lea del topic donde se han ido dejando los mensajes ya procesados, y se guarde la información en una colección de Mongo en formato JSON. Para dar de alta este conector sería de la siguiente forma:
 
 `CREATE SINK CONNECTOR `mongodb-sink-connector` WITH (
 "connector.class"='com.mongodb.kafka.connect.MongoSinkConnector',
@@ -69,7 +69,7 @@ Los mensajes enviados a Kafka se van a consumir de dos maneras diferente:
 "topics"='event1'
 );`
 
--Por otro lado se va a usar KSQLDB para obtener información procesada de los valores almacenados en el topic, en este caso queremos que se calculen valores como el máximo, mínimo y media, de tal forma que esa información directamente se almacene en la colección correspondiente.
+2-Por otro lado se va a usar KSQLDB para obtener información procesada de los valores almacenados en el topic. En este caso queremos que se calculen valores como el máximo, mínimo y media, de tal forma que esa información se almacene directamente en la colección correspondiente.
     
 Se crea un Stream para poder leer la información del topic correctamente en formato JSON:
 
@@ -91,7 +91,7 @@ FROM json
 WINDOW TUMBLING (SIZE 1 MINUTES)
 GROUP BY ID;`
 
-Y por último creamos un conector que nos permita leer la información de la tabla y dejarla en la colección de Mongo correspondiente:
+Y por último, creamos un conector que nos permita leer la información de la tabla y dejarla en la colección de Mongo correspondiente:
 
 `CREATE SINK CONNECTOR `max-sink-connector` WITH (
 "connector.class"='com.mongodb.kafka.connect.MongoSinkConnector',
@@ -114,15 +114,15 @@ Una vez que tengamos la información en cada una de las colecciones, podremos co
 
 La parte de generación de información de los sensores se puede encontrar en la carpeta **/iot-sensor.**
 
-El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio **/src/main/java** y la configuración necesaria para realizar las distintas conexiones está en la carpeta **/src/main/resources**.
+El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio **/src/main/java**. La configuración necesaria para realizar las distintas conexiones está en la carpeta **/src/main/resources**.
 
-Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se van a levantar imágenes de Mongodb, Zookeeper, Kafka, Kafka Connect, del servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose en la imagen de Kafka Connect del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
+Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**. Esto nos permitirá levantar imágenes de Mongodb, Zookeeper, Kafka, Kafka Connect, del servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar, la instalación que se debe hacer en la imagen de Kafka Connect, del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
 
 
 ## Bibliografía
 
-Aquí están los enlaces más importantes utilizados para la realización del proyecto:
+Los enlaces más importantes utilizados para la realización del proyecto son los siguientes:
 
 -https://github.com/andresgomezfrr/streaming-pipeline-v2
 

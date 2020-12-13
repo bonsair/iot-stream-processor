@@ -8,6 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="587f8373-46f8-44e5-bfac-ae647827cb64" name="Default" comment="Cambios en la documentación">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -260,7 +261,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607886728793</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Cambios en la documentación">
+      <created>1607887026852</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1607887026852</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
