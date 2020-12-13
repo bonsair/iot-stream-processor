@@ -17,19 +17,19 @@ import java.util.concurrent.TimeUnit;
 
 public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
 
-    // ----- Required property keys default values
+    // Propiedades requeridas, valores por defecto
     public static final String URL = "mqtt.server.url";
     public static final String PORT = "mqtt.port";
     public static final String TOPIC_FILTER_NAME = "iot/sensor/rodri";
 
-    // ------ Optional property keys
+    // Propiedades opcionales
     public static final String USERNAME = "mqtt.username";
     public static final String PASSWORD = "mqtt.password";
 
 
     private final Properties properties;
 
-    // ------ Runtime fields
+    // Campos para la ejecución
     private transient MqttClient client;
     private transient volatile boolean running;
     private transient Object waitLock;
@@ -56,17 +56,17 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
     @Override
     public void run(final SourceContext<String> ctx) throws Exception {
         Mqtt5BlockingClient client = Mqtt5Client.builder()
-                .identifier(UUID.randomUUID().toString()) // the unique identifier of the MQTT client. The ID is randomly generated between
-                .serverHost(properties.getProperty(URL))  // the host name or IP address of the MQTT server. Kept it 0.0.0.0 for testing. localhost is default if not specified.
-                .serverPort(Integer.valueOf(properties.getProperty(PORT)))  // specifies the port of the server
-                .buildBlocking();  // creates the client builder
+                .identifier(UUID.randomUUID().toString()) // El identificador único del cliente MQTT. La identificación se genera aleatoriamente entre
+                .serverHost(properties.getProperty(URL))  // el nombre de host o la dirección IP del servidor MQTT, localhost es el predeterminado si no se especifica.
+                .serverPort(Integer.valueOf(properties.getProperty(PORT)))  // especifica el puerto del servidor
+                .buildBlocking();  // crea el constructor cliente
 
-        client.connect();  // connects the client
+        client.connect();  // se conecta al cliente
 
 
-        client.subscribeWith()  // creates a subscription
-                .topicFilter(TOPIC_FILTER_NAME)  // filters to receive messages only on this topic (# = Multilevel wild card, + = single level wild card)
-                .qos(MqttQos.AT_LEAST_ONCE)  // Sets the QoS to 2 (At least once)
+        client.subscribeWith()  // crea la suscripción
+                .topicFilter(TOPIC_FILTER_NAME)  // filtros para recibir mensajes solo sobre este tema (# = comodín multinivel, + = comodín de un solo nivel)
+                .qos(MqttQos.AT_LEAST_ONCE)  // Establece la QoS en 2 (al menos una vez)
                 .send();
         System.out.println("Se ha subscrito al cliente");
 
@@ -86,14 +86,13 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
 
                 Mqtt5Publish receivedMessage = publishesClient2.receive(5, TimeUnit.SECONDS).get();
 
-                byte[] tempdata = receivedMessage.getPayloadAsBytes();    // converts the "Optional" type message to a byte array
+                byte[] tempdata = receivedMessage.getPayloadAsBytes();    // convierte el mensaje de tipo "Opcional" en un array de bytes
 
-                String getdata = new String(tempdata); // converts the byte array to a String
+                String getdata = new String(tempdata); // convierte el array de bytes en una cadena
 
-                System.out.println("Raw" + getdata);
+                System.out.println("Valor en crudo: " + getdata);
 
-
-                /////Uniendo
+                // Añadimos los valores a la colección
                 ctx.collect(getdata);
 
             }catch(NoSuchElementException ex){
