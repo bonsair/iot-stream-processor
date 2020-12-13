@@ -3,15 +3,19 @@
 
 Este proyecto implementa un sistema para el procesado de información generada por sensores IOT en tiempo real, desde la creación de los datos por los sensores, su procesado y el posterior tratamiento de la información que proporcionan.
 
+
+
 ## Diseño de la arquitectura
 ![Diseño de la arquitectura](/arquitectura/Diagrama-arquitectura.png)
+
 
 
 ## Ejecución de la Arquitectura
 
 A continuación se detallan cada una de las fases asi como su implementación:
 
-### Generación de información
+
+### Generación de la información
 
 La información de los sensores se va a generar a través de un proceso docker que va a ejecutar código phyton, este código generará los valores asi como hará el envío de esa información mediante MQTT.
 
@@ -105,13 +109,15 @@ Y por último creamos un conector que nos permita leer la información de la tab
 Una vez que tengamos la información en cada una de las colecciones, podremos consultarlas desde Tableau y crear los informes que necesitemos.
 
 
+
 ## Infraestructura
 
 Como ya he explicado, la parte de generación de información de los sensores se puede encontrar en la carpeta **/iot-sensor.**
 
 El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio **/src/main/java** y la configuración necesaria para realizar las distintas conexiones está en la carpeta **/src/main/resources**.
 
-Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
+Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar imágenes de Mongodb, Zookeeper, Kafka, Kafka Connect, del servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose en la imagen de Kafka Connect del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
+
 
 
 ## Bibliografía
