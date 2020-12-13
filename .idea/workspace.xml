@@ -7,9 +7,10 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/stream/StreamProcessor.java" line="94" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="587f8373-46f8-44e5-bfac-ae647827cb64" name="Default" comment="Revisión de la documentación">
+    <list default="true" id="587f8373-46f8-44e5-bfac-ae647827cb64" name="Default" comment="Subida documentación">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/stream/sources/HiveMQSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/stream/sources/HiveMQSource.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,21 +234,7 @@
       <option name="project" value="LOCAL" />
       <updated>1607793823615</updated>
     </task>
-    <task id="LOCAL-00009" summary="Revisión de la documentación">
-      <created>1607861442327</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1607861442327</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Revisión de la documentación">
-      <created>1607862026429</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1607862026429</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -294,22 +281,10 @@
       </list>
     </option>
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Default" />
     <MESSAGE value="Subida documentación" />
-    <MESSAGE value="Revisión de la documentación" />
-    <option name="LAST_COMMIT_MESSAGE" value="Revisión de la documentación" />
+    <option name="LAST_COMMIT_MESSAGE" value="Subida documentación" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/resources/application.properties">
