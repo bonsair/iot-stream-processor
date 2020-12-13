@@ -35,13 +35,13 @@ Todo este procesado se va a realizar en la clase **StreamProccesor**, que es la 
 
 -_Obtención de los mensajes_: en el fichero de propiedades **application.properties** se define la configuración para la conexión al Broker MQTT, en la clase HiveMQSource hacemos la conexión al broker y nos suscribimos a este para ir obteniendo los mensajes.
 
--_Transformación de los mensajes a objeto_: vamos a transformar los mensajes en objetos para poder realizar el guardado en Mongo y el envío a Kafka, las clases que representan estos objetos y a las que se van a realizar la transformación para obtener la estructura con SensorEvent y Metrics.
+-_Transformación de los mensajes a objeto_: vamos a transformar los mensajes en objetos para poder realizar el guardado en Mongo y el envío a Kafka, las clases que representan estos objetos y que usaremos para realizar la transformación para obtener la estructura son SensorEvent y Metrics.
 
 -_Guardado de mensajes en crudo_: por si es necesario su posterior tratamiento, se van a guardar todos los mensajes en una BBDD Mongo, la clase que se va a ocupar de la comunicación con Mongo será **MongoDBRawdata**, los valores de configuración de Mongo estarán también en el fichero **application.properties**.
  
 -_Filtrado de mensajes_: ya que los valores son generados por sensores y puede que estos no sean siempre correctos, se van a filtrar los mensajes de forma que solo nos vamos a quedar con los valores correctos, solo estos serán enviados para el análisis de la información.
 
--_Envío de mensajes a topic kafka_: por último se van a enviar los mensajes en formato JSON a un topic kafka para su análisis, los parámetros para la configuración de Kafka estarán en el fichero **application.properties**.
+-_Envío de mensajes a topic Kafka_: por último se van a enviar los mensajes en formato JSON a un topic kafka para su análisis, los parámetros para la configuración de Kafka estarán en el fichero **application.properties**.
 
 
 ### Análisis de la información
@@ -50,7 +50,7 @@ El análisis de la información se va a realizar a través de la herramienta Tab
 
 Los mensajes enviados a Kafka se van a consumir de dos maneras diferente:
 
--Toda la información de los mensajes se va a trasladar a MongoDB, a través de KSQLDB podemos crear un conector que directamente lea del topic, donde se han ido dejando los mensajes ya procesados, y se guarde la información en una colección de Mongo en formato JSON, para dar de alta este conector seria de esta forma:
+-Toda la información de los mensajes correctos se va a trasladar a MongoDB, a través de KSQLDB podemos crear un conector que directamente lea del topic donde se han ido dejando los mensajes ya procesados, y se guarde la información en una colección de Mongo en formato JSON, para dar de alta este conector sería la siguiente forma:
 
 `CREATE SINK CONNECTOR `mongodb-sink-connector` WITH (
 "connector.class"='com.mongodb.kafka.connect.MongoSinkConnector',
@@ -65,7 +65,7 @@ Los mensajes enviados a Kafka se van a consumir de dos maneras diferente:
 "topics"='event1'
 );`
 
--Por otro lado se va a usar KSQLDB para obtener información procesada de los valores almacenados en el topic, en este caso queremos que se calculen valores como el máximo, mínimo y media de tal forma que esa información directamente se almacene en la colección correspondiente.
+-Por otro lado se va a usar KSQLDB para obtener información procesada de los valores almacenados en el topic, en este caso queremos que se calculen valores como el máximo, mínimo y media, de tal forma que esa información directamente se almacene en la colección correspondiente.
     
 Se crea un Stream para poder leer la información del topic correctamente en formato JSON:
 
@@ -107,11 +107,11 @@ Una vez que tengamos la información en cada una de las colecciones, podremos co
 
 ## Infraestructura
 
-Como ya he explicado, la parte de generación de información de los sensores está en la carpeta **/iot-sensor.**
+Como ya he explicado, la parte de generación de información de los sensores se puede encontrar en la carpeta **/iot-sensor.**
 
 El procesado de los datos se va a realizar con las clases que se proporcionan en el repositorio **/src/main/java** y la configuración necesaria para realizar las distintas conexiones está en la carpeta **/src/main/resources**.
 
-Para el resto de tecnologías y para poder probar su funcionamiento se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
+Para el resto de tecnologías y para poder probar su funcionamiento, se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
 
 ## Bibliografía
@@ -136,6 +136,6 @@ Aquí están los enlaces más importantes utilizados para la realización del pr
 
 -https://www.confluent.io/stream-processing-cookbook/ksql-recipes/nested-json-data/
 
-También se ha utilizado documentación perteneciente al X Master en Arquitectura Big Data impartido por [KSchool](www.kschool.com).
+También se ha utilizado documentación perteneciente al X Master en Arquitectura Big Data impartido por [KSchool](http://www.kschool.com).
 
     
