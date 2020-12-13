@@ -26,7 +26,6 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
     public static final String USERNAME = "mqtt.username";
     public static final String PASSWORD = "mqtt.password";
 
-
     private final Properties properties;
 
     // Campos para la ejecución

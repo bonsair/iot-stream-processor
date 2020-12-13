@@ -1,7 +1,13 @@
 # IOT STREAM PROCESSOR
 
 
-Este proyecto implementa un sistema para el procesado de eventos en tiempo real, desde la creación de los mensajes por los sensores, su procesado y el posterior tratamiento de la información.
+Este proyecto implementa un sistema para el procesado de información generada por sensores IOT en tiempo real, desde la creación de los datos por los sensores, su procesado y el posterior tratamiento de la información que proporcionan.
+
+## Diseño de la arquitectura
+![Diseño de la arquitectura](/arquitectura/Diagrama-arquitectura.png)
+
+
+## Ejecución de la Arquitectura
 
 A continuación se detallan cada una de las fases asi como su implementación:
 
@@ -107,9 +113,6 @@ El procesado de los datos se va a realizar con las clases que se proporcionan en
 
 Para el resto de tecnologías y para poder probar su funcionamiento se ha utilizado el docker-compose.yml que está en la carpeta **/infraestructura**, con esto se va a levantar un Mongodb, un Zookeeper, un Kafka, el servidor de KSQLDB y su cliente, asi como todo lo necesario para que se conecten entre ellos. Es importante destacar la instalación que se debe hacer en el docker compose del conector de KSQLDB con Mongo (confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.3.0).
 
-## Diseño de la arquitectura
-![Diseño de la arquitectura](/arquitectura/Diagrama-arquitectura.png)
-
 
 ## Bibliografía
 
@@ -132,5 +135,7 @@ Aquí están los enlaces más importantes utilizados para la realización del pr
 -https://help.tableau.com/current/pro/desktop/en-us/examples_mongodb.htm
 
 -https://www.confluent.io/stream-processing-cookbook/ksql-recipes/nested-json-data/
+
+También se ha utilizado documentación perteneciente al X Master en Arquitectura Big Data impartido por [KSchool](www.kschool.com).
 
     
