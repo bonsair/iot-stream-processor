@@ -1,16 +1,22 @@
 package stream.sources;
 
+import com.hivemq.client.internal.mqtt.message.auth.MqttSimpleAuth;
+import com.hivemq.client.internal.mqtt.message.auth.MqttSimpleAuthBuilder;
 import com.hivemq.client.mqtt.MqttGlobalPublishFilter;
 import com.hivemq.client.mqtt.datatypes.MqttQos;
+import com.hivemq.client.mqtt.datatypes.MqttUtf8String;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
+import com.hivemq.client.mqtt.mqtt5.message.auth.Mqtt5SimpleAuth;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 import org.apache.flink.api.common.functions.StoppableFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import java.nio.ByteBuffer;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -58,6 +64,7 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
                 .identifier(UUID.randomUUID().toString()) // El identificador único del cliente MQTT. La identificación se genera aleatoriamente entre
                 .serverHost(properties.getProperty(URL))  // el nombre de host o la dirección IP del servidor MQTT, localhost es el predeterminado si no se especifica.
                 .serverPort(Integer.valueOf(properties.getProperty(PORT)))  // especifica el puerto del servidor
+                .automaticReconnectWithDefaultConfig()
                 .buildBlocking();  // crea el constructor cliente
 
         client.connect();  // se conecta al cliente
@@ -65,7 +72,7 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
 
         client.subscribeWith()  // crea la suscripción
                 .topicFilter(properties.getProperty(TOPIC_FILTER_NAME))  // filtros para recibir mensajes solo sobre este tema (# = comodín multinivel, + = comodín de un solo nivel)
-                .qos(MqttQos.AT_LEAST_ONCE)  // Establece la QoS en 2 (al menos una vez)
+                .qos(MqttQos.EXACTLY_ONCE)  // Establece la QoS en 2 (al menos una vez)
                 .send();
         System.out.println("Se ha subscrito al cliente");
 
@@ -83,7 +90,7 @@ public class HiveMQSource implements SourceFunction<String>, StoppableFunction {
 
             try {
 
-                Mqtt5Publish receivedMessage = publishesClient2.receive(5, TimeUnit.SECONDS).get();
+                Mqtt5Publish receivedMessage = publishesClient2.receive(100, TimeUnit.SECONDS).get();
                 byte[] tempdata = receivedMessage.getPayloadAsBytes();    // convierte el mensaje de tipo "Opcional" en un array de bytes
                 String getdata = new String(tempdata); // convierte el array de bytes en una cadena
 
